@@ -74,6 +74,19 @@ lets a thread logically "resume" a previous count.
 
 3. Executable Format
 
+THVM runs a single startup program upon boot. The format of this program must be the following:
+    * 8-bit version
+    * 8-bit flags
+    * 16-bit checksum
+        * byte 0 = 0xBAADBEEF
+        * byte 1 = (version + (flags / 2))
+    * 64-bits: length <data_len> of .data section
+    * <data_len> bytes: .data section
+    * 64-bits: length <text_len> of .text section
+    * <text_len> bytes: .text section
+
+    <data_len> and <text_len> must be even numbers.
+
 4. Instructions
 
 Instructions for THVM are 2 bytes long:
@@ -83,4 +96,19 @@ Instructions for THVM are 2 bytes long:
 |   arg   | opcode  |
 +---------+---------+
 
+Some instructions require 16-bit arguments; however, instructions are 16 bits in total.
+In these cases, the arg byte is an encoding of the actual argument, according to this algorithm:
+    * Let x be the actual 16-bit argument, ex. an immediate value.
+    * Let y = x / 256.
+    * The value of the arg byte will be y.
+
 5. Opcodes
+
+Mnemonics:
+    * <reg> - The 8-bit index of a register. ex. 0 for $r0, 4 for $r4.
+    * <imm8> - An 8-bit value.
+    * <imm16> - A 16-bit value, divided by 256. (Ultimately an 8-bit value).
+
+ADD <reg> - Adds the value of <reg> into $r0.
+ADDI <imm16> - Adds an immediate value into $r0.
+MOV <reg> - Moves 
