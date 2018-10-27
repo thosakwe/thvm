@@ -6,10 +6,12 @@ Table of Contents
 2. Machine
     2.1. CPU
       2.1.1. Registers
+        2.1.1.1. Flag Register
       2.1.2. Scheduler
     2.2. MMU
     2.3. Timer
 3. Executable Format
+    3.1. Metadata
 4. Instructions
 5. Opcodes
 
@@ -94,8 +96,26 @@ THVM runs a single startup program upon boot. The format of this program must be
     * <data_len> bytes: .data section
     * 64-bits: length <text_len> of .text section
     * <text_len> bytes: .text section
+    * 64-bits: len <meta_len> of metadata
+    * <meta_len> bytes: metadata
 
     <data_len> and <text_len> must be even numbers.
+
+3.1 Metadata
+The metadata section contains of a series of metadata items.
+The metadata section corresponds to a simple dictionary of keys and
+values, where values can be either strings or integers.
+
+A metadata item consists of:
+    * A c-string, the name of the key.
+    * A single byte, representing the value's type.
+    * The value.
+
+Values may have the following types:
+    * type 0 = c-string
+    * type 1 = 8-bit unsigned
+    * type 2 = 16-bit signed
+    * type 3 = 64-bit signed
 
 4. Instructions
 
