@@ -30,7 +30,17 @@ THVM, like any other computer machine, consists of several components:
 2.1.1. Registers
 
 THVM's CPU has 16 16-bit general-purpose registers, named $r0, $r1, ..., $r15.
-In addition to these registers, the CPU has an 8-bit $flag register.
+In addition to these registers, the CPU has an 8-bit $flag register, and a stack
+that operates on 16-bit words.
+
+2.1.1.1 Flag Register
+
+The flag register takes the following form:
+
+7         6         5         4         3         2         1         0
++---------+---------+---------+---------+---------+---------+---------+
+|         |         |         |         |  less   | greater |  equal  |
++---------+---------+---------+---------+---------+---------+---------+
 
 2.1.2. Scheduler
 
@@ -106,9 +116,66 @@ In these cases, the arg byte is an encoding of the actual argument, according to
 
 Mnemonics:
     * <reg> - The 8-bit index of a register. ex. 0 for $r0, 4 for $r4.
+    * <reg, imm4> - 8 bits. bits 0-3 = register, bytes 4-7 = value
+    * <regs> - An 8-bit value. bytes 0-3 = destination reg, bytes 4-7 = source reg
     * <imm8> - An 8-bit value.
     * <imm16> - A 16-bit value, divided by 256. (Ultimately an 8-bit value).
 
-ADD <reg> - Adds the value of <reg> into $r0.
+Arithmetic instructions: 
+ADD <regs> - Adds the value of src into dst
+ADDIB <imm8> - Adds a value into a register.
 ADDI <imm16> - Adds an immediate value into $r0.
-MOV <reg> - Moves 
+DIV <regs>
+MOD <regs>
+MUL <regs> - Multiplies dst and src, saves result in dst
+MOV <regs> - Moves src to dst
+MOV <reg
+SUB <regs>
+ZERO <reg> - Clears a register.
+
+Bitwise operations:
+AND <regs>
+OR <regs>
+NEG <reg> - Negates the value of a register
+NAND <regs>
+NOR <regs>
+XOR <regs>
+SHL <reg, imm4>
+SHLR <reg, imm4>
+
+Boolean Instructions:
+All set the $flag register based on the status of equality between
+two registers.
+
+CMP <regs>
+CMPI <imm16> - Compares $r0 to a value
+CMPIB <imm8>
+
+Control Flow Instructions:
+CALL <imm16> - Pushes address of next instruction, and does a jump.
+CALL8 <imm8>
+FARCALL <reg> - Jumps to whatever location is stored in <reg>, if it's executable, and sets flag to 1. Otherwise zeroes flag.
+JMP <reg>
+JE <reg> - jump if equal
+JNE <reg> - jump if not equal
+JG <reg> - jump if greater
+JGE <reg> - jump if greater or equal
+JL <reg> - jump if less
+JLE <reg> - jump if less or equal
+JZ <reg> - jump if zero
+JNZ <reg> - jump if not zero
+RET - Pops address from stack and jumps
+
+Stack Instructions:
+POP <reg> - Pops a 16-bit value from the stack into the register.
+PUSH <reg> - Pushes a 16-bit value.
+
+Memory Instructions:
+READ <regs> - Reads the value at memory offset <src> into register <dst>.
+WRITE <regs> - Writes the value at memory offset <src> into register <dst>.
+
+Other Instructions:
+FLAG <reg> - Clears <reg>, and then reads the value of $flag into <reg>.
+INT <reg> - Interrupts the system with the specified number.
+INT8 <imm8>
+INT16 <imm16>
