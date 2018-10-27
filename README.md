@@ -7,5 +7,7 @@ A 16-bit virtual machine with cooperative multi-tasking, paging, and more.
 * Implement a virtual machine that implements the aforementioned instruction set.
 * Eventually JIT-compile this bytecode to x86/x86_64?
 
-* [Complete Specification](docs/thvm.spec)
+## Documentation
+* [Complete Machine Specification](docs/thvm.spec)
+* [Assembler](docs/thasm.md)
 
