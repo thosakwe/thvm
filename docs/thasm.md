@@ -15,7 +15,7 @@ thasm -o foo.bin foo.asm
 .text
     main:
         set $r0, msg # Load the address of the string
-        int 4 # Syscall
+        int 4 # Print
 ```
 
 ## Grammar
