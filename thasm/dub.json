@@ -1,0 +1,9 @@
+{
+	"name": "thasm",
+	"authors": [
+		"Tobe Osakwe"
+	],
+	"description": "Assembler for the THVM.",
+	"copyright": "Copyright © 2018, Tobe Osakwe",
+	"license": "MIT"
+}

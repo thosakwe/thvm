@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+thasm.so
+thasm.dylib
+thasm.dll
+thasm.a
+thasm.lib
+thasm-test-*
+*.exe
+*.o
+*.obj
+*.lst
+thasm
